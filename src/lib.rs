@@ -13,7 +13,8 @@ struct FormData {
     email: String
 }
 
-async fn subscripe(_form: web::Form<FormData>) -> HttpResponse {
+async fn subscripe(form: web::Form<FormData>) -> HttpResponse {
+    println!("{}: {}", form.name, form.email);
     HttpResponse::Ok().finish()
 }
 
