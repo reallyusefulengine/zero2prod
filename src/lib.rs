@@ -10,7 +10,7 @@ async fn health_check() -> HttpResponse {
 #[derive(serde::Deserialize)]
 struct FormData {
     name: String,
-    email: String
+    email: String,
 }
 
 async fn subscripe(form: web::Form<FormData>) -> HttpResponse {
@@ -22,12 +22,13 @@ async fn subscripe(form: web::Form<FormData>) -> HttpResponse {
 // We return `Server` on the happy path and we dropped the `async` keyword // We have no .await call, so it is not needed anymore.
 
 pub fn run(listener: TcpListener) -> Result<Server, std::io::Error> {
-    let server = HttpServer::new(|| App::new()
+    let server = HttpServer::new(|| {
+        App::new()
             .route("/health_check", web::get().to(health_check))
             .route("/subscriptions", web::post().to(subscripe))
-        )
-        .listen(listener)?
-        .run();
+    })
+    .listen(listener)?
+    .run();
     // No .await here!
     Ok(server)
 }
